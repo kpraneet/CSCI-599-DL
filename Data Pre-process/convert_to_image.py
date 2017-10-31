@@ -1,6 +1,6 @@
 #working with only 1 wav file for now
 
-import matplotlib.pyplot as plt
+import matplotlib.pyplot as plt ###
 from scipy.io import wavfile
 
 def graph_spectrogram(wav_file, opath):

@@ -6,7 +6,7 @@ if __name__ == '__main__': # Main function
     ipath = '/home/khyati/Documents/599 DL/Project/IRMAS-Sample'
     opath = '/home/khyati/Documents/599 DL/Project/IRMAS-spectrograms'
     for root, subdirs, files in os.walk(ipath):
-        if 'IRMAS-Sample' in root:
+        if 'IRMAS-Sample' in root:  ###
             newDir = root.replace('IRMAS-Sample','IRMAS-spectrograms')
             if not os.path.exists(newDir):
                 os.mkdir(newDir)
