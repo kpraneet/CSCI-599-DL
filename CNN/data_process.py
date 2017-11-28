@@ -23,26 +23,24 @@ def main():
                 img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
                 fixed_size = (128, 43)
                 img = cv2.resize(img, dsize=fixed_size)
-                # cv2.imshow('Image', img)
-                # cv2.waitKey(0)
-                # cv2.destroyAllWindows()
-                # print(root)
                 print(file_name)
                 file_label = root.split('/')[-1]
-                train_data.append(img)
-                tmp = [0] * 11
-                tmp[label_dict[file_label]] = 1
-                train_label.append(tmp)
                 if filecount % 7 == 0:
                     eval_data.append(img)
                     tmp = [0] * 11
                     tmp[label_dict[file_label]] = 1
                     eval_label.append(tmp)
-                if filecount % 11 == 0:
+                elif filecount % 11 == 0:
                     test_data.append(img)
                     tmp = [0] * 11
                     tmp[label_dict[file_label]] = 1
                     test_label.append(tmp)
+                else:
+                    train_data.append(img)
+                    tmp = [0] * 11
+                    tmp[label_dict[file_label]] = 1
+                    train_label.append(tmp)
+    print(filecount)
     print(len(train_data), len(train_label), len(eval_data), len(eval_label), len(test_data), len(test_label))
     train_data = np.array(train_data, np.float32) / 255.
     train_label = np.array(train_label, np.int32)

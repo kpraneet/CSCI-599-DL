@@ -1,3 +1,4 @@
+import cv2
 import os.path
 import numpy as np
 from keras import optimizers
@@ -7,6 +8,7 @@ from keras.layers import Dense, Dropout, BatchNormalization, Conv2D, MaxPooling2
 
 
 def main():
+    path = "/Users/praneet/Documents/USC - MS/Fall 2017/CS 599 - DL/CSCI-599-DL/CNN/IRMAS-training_spectrograms"
     train_data = np.load('train_data.npy')
     train_label = np.load('train_label.npy')
     eval_data = np.load('eval_data.npy')
@@ -18,6 +20,9 @@ def main():
     print('Test data: ', len(test_data))
     epochs = 1000
     learn_rate = 0.001
+    filecount = 0
+    data_name = []
+    data_list = []
     if os.path.isfile('cnn_model.h5'):
         model = load_model('cnn_model.h5')
     else:
@@ -65,6 +70,25 @@ def main():
     predictions = saved_model.predict(test_data, batch_size=128)
     print(predictions)
     print(test_label)
+    for root, dirs, files in os.walk(path):
+        for file_name in files:
+            if file_name.endswith(".png"):
+                filecount += 1
+                file_path = os.path.abspath(os.path.join(root, file_name))
+                img = cv2.imread(file_path)
+                img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+                fixed_size = (128, 43)
+                img = cv2.resize(img, dsize=fixed_size)
+                data_list.append(img)
+                data_name.append(file_name)
+    data_list = np.array(data_list, np.float32) / 255.
+    for x in range(len(predictions)):
+        if np.where(predictions[x] == predictions[x].max()) == np.where(test_label[x] == test_label[x].max()):
+            for y in range(len(data_list)):
+                if np.array_equal(test_data[x], data_list[y]):
+                    print(data_name[y])
+    pred_score = saved_model.evaluate(x=test_data, y=test_label, batch_size=128)
+    print(pred_score)
 
 
 if __name__ == '__main__':
